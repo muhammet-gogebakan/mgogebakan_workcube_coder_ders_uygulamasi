@@ -4,14 +4,19 @@
 
     <cfset dsn = application.systemParam.systemParam().dsn>
 
-    <cffunction name="get_list" access="public" > <!---listeleme fonksiyonu---->
-      
+    <cffunction name="get_list" access="public" > <!---listeleme query fonksiyonu---->
+        <cfargument name="adi" default="">
         <cfquery name="query_list" datasource="#dsn#">
 
             SELECT 
                 * 
             FROM 
                 CARTOONS
+            
+            WHERE
+                Name LIKE <cfqueryparam cfsqltype ='CF_SQL_NVARCHAR' value='%#arguments.adi#%'>
+
+            ORDER BY CartoonId
 
         </cfquery>
         <cfreturn query_list>
@@ -34,7 +39,7 @@
             )
             VALUES
             (
-            <cfqueryparam cfsqltype='CF_SQL_INTEGER' value='#arguments.CartoonId#' null="#len(arguments.CartoonId)?'no':'yes'#">,
+            <cfqueryparam cfsqltype='CF_SQL_INTEGER' value='#arguments.CartoonId#'>,
             <cfqueryparam cfsqltype='CF_SQL_NVARCHAR' value='#arguments.name#'>,
             <cfqueryparam cfsqltype='CF_SQL_NVARCHAR' value='#arguments.broadcasttime#' null="#len(arguments.broadcasttime)?'no':'yes'#">,
             <cfqueryparam cfsqltype='CF_SQL_NVARCHAR' value='#arguments.tvchannel#' null="#len(arguments.tvchannel)?'no':'yes'#">
@@ -42,9 +47,10 @@
         </cfquery>
     </cffunction>
 
-    <cffunction name="get_row" access="public" > <!---listeyi düzenlemeekranına yönlendirme fonksiyonu---->
-        <cfargument  name="id">
-
+    <cffunction name="get_row" access="public"> <!----listeyi düzenleme ekranı query fonksiyonu----->
+        
+        <cfargument name="CartoonId" default="">
+    
         <cfquery name="query_row" datasource="#dsn#">
 
             SELECT 
@@ -52,15 +58,15 @@
             FROM 
                 CARTOONS
             WHERE
-                CartoonId = <cfqueryparam cfsqltype ='CF_SQL_INTEGER' value='#arguments.CartoonId#'>
-
+                CartoonId = <cfqueryparam cfsqltype ='CF_SQL_NVARCHAR' value='#arguments.CartoonId#'>     <!---e_soru: cf_sql_integer'da hata veriyor ancak, CF_SQL_NVARCHAR'da hata vermiyor---->
         </cfquery>
         <cfreturn query_row>
     </cffunction>
 
     <cffunction name="upd_func" access="public"> <!---listeyi düzenleme fonksiyonu---->
+
         <cfargument  name="CartoonId" default="">
-        <cfargument  name="name">
+        <cfargument  name="name"  default="">
         <cfargument  name="broadcasttime" default="">
         <cfargument  name="tvchannel" default="">
 
@@ -68,12 +74,13 @@
             UPDATE 
                 CARTOONS
             SET
-                CartoonId = <cfqueryparam cfsqltype='CF_SQL_INTEGER' value='#arguments.CartoonId#' null="#len(arguments.CartoonId)?'no':'yes'#">,
+                
+                CartoonId = <cfqueryparam cfsqltype='CF_SQL_NVARCHAR' value='#arguments.CartoonId#'>,
                 Name = <cfqueryparam cfsqltype='CF_SQL_NVARCHAR' value='#arguments.name#'>,
                 BroadcastTime = <cfqueryparam cfsqltype='CF_SQL_NVARCHAR' value='#arguments.broadcasttime#' null="#len(arguments.broadcasttime)?'no':'yes'#">,
                 TVChannel = <cfqueryparam cfsqltype='CF_SQL_NVARCHAR' value='#arguments.tvchannel#' null="#len(arguments.tvchannel)?'no':'yes'#">
             WHERE
-                CartoonId = <cfqueryparam cfsqltype ='CF_SQL_INTEGER' value='#arguments.CartoonId#'>
+                CartoonId = <cfqueryparam cfsqltype ='CF_SQL_NVARCHAR' value='#arguments.CartoonId#'>
         </cfquery>
 
     </cffunction>

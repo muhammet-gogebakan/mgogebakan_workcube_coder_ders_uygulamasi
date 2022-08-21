@@ -1,12 +1,12 @@
 <!---views/upd.cfm---><!---ekran önyüz----->
 
 <cfobject name="cartoonmodel" type="component" component="V16.add_options.mgogebakan_w3.cartoons.models.cartoon">
-  <cfset cartoondata=cartoonmodel.get_row(attributes.CartoonId)>
+  <cfset cartoondata=cartoonmodel.get_row(cartoonId:"#CartoonId#")>  <!---burada get_row fonksiyonu "CartoonId" argumentine (fonksiyon parametresine) list sayfasından http ile gelen "CartoonId" değeri eşitleniyor ki bu sayede fonksiyon içerisindeki query tanımlı argumente göre filtrelenmiş oluyor-------->
 
 <cf_box title="Çizgi Film">
     <cfform name="form1" method="post">
-    <cfoutput><!-----
-    <input type="hidden" name="CartoonId" value="#attributes.CartoonId#">---->
+    <cfoutput>
+    <!---<input type="hidden" name="CartoonId" value="#attributes.CartoonId#">--->
         <div class="form-group col col-6 col-md-6 col-sm-6 col-xs-12" id="item-CartoonId">
             <div class="col col-3 col-md-3 col-sm-3 col-xs-12">
                 <label>CartoonId</label>
@@ -52,3 +52,19 @@
         return true;
     }
 </script>
+
+<!---http'de tanımlı değerler---->
+<div style="margin:10px;">EVENT : 
+<cfdump  var="#event#">
+</div><hr>
+<div style="margin:10px;">FUSEACTION : 
+<cfdump  var="#fuseaction#">
+</div><hr>
+<div style="margin:10px;">CARTOONID : 
+<cfdump  var="#CartoonId#">
+</div><hr>
+<!---get_row fonksiyonu çıktısı cartoondata---->
+<div style="margin:10px;">CARTOONDATA : 
+<cfdump  var="#CartoonData#">
+</div><hr>
+
